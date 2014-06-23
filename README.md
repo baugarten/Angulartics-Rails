@@ -1,6 +1,6 @@
 # Angulartics::Rails
 
-TODO: Write a gem description
+Adds angulartics to your application
 
 ## Installation
 
@@ -18,7 +18,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add
+
+```
+//= require angulartics
+//= require angulartics-ga 
+...
+```
+
+to your application.js file. Add whatever snippet is necessary (minus the pageview portion). i.e. for GA, add your snipped, but delete
+
+```js
+  ga('send', 'pageview'); // <-- DELETE THIS LINE!
+```
 
 ## Contributing
 
