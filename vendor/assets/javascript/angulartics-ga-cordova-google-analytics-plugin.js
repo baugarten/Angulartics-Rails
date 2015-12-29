@@ -10,6 +10,7 @@
  * @ngdoc overview
  * @name angulartics.google.analytics
  * Enables analytics support for Google Analytics (http://google.com/analytics)
+ * for Cordova with google-analytics-plugin (https://github.com/danwilson/google-analytics-plugin)
  */
 angular.module('angulartics.google.analytics.cordova', ['angulartics'])
 
@@ -45,13 +46,11 @@ angular.module('angulartics.google.analytics.cordova', ['angulartics'])
 
     this.init = function () {
       return deferred.promise.then(function () {
-        var analytics = window.plugins && window.plugins.gaPlugin;
-        if (analytics) {
-          analytics.init(function onInit() {
-            ready(analytics, success, failure);
-          }, failure, trackingId, period || 10);
+        if (typeof analytics != 'undefined') {
+          ready(analytics, success, failure);
+          analytics.startTrackerWithId(trackingId);
         } else if (debug) {
-          $log.error('Google Analytics for Cordova is not available');
+          $log.error('Google Analytics Plugin for Cordova is not available');
         }
       });
     };
@@ -75,11 +74,11 @@ angular.module('angulartics.google.analytics.cordova', ['angulartics'])
 .config(['$analyticsProvider', 'googleAnalyticsCordovaProvider', function ($analyticsProvider, googleAnalyticsCordovaProvider) {
   googleAnalyticsCordovaProvider.ready(function (analytics, success, failure) {
     $analyticsProvider.registerPageTrack(function (path) {
-      analytics.trackPage(success, failure, path);
+      analytics.trackView(path);
     });
 
     $analyticsProvider.registerEventTrack(function (action, properties) {
-      analytics.trackEvent(success, failure, properties.category, action, properties.label, properties.value);
+      analytics.trackEvent(properties.category, action, properties.label, properties.value);
     });
   });
 }])
